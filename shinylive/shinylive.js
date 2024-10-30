@@ -31709,16 +31709,24 @@ var Yt = class extends se {
   }
 };
 De = /* @__PURE__ */ new WeakMap(), de = /* @__PURE__ */ new WeakMap(), We = /* @__PURE__ */ new WeakMap(), er = /* @__PURE__ */ new WeakSet(), Vs = async function(t) {
-  d(this, de, await navigator.serviceWorker.register(t)), await navigator.serviceWorker.ready, window.addEventListener("beforeunload", () => {
+if ("serviceWorker" in navigator) {
+    d(this, de, await navigator.serviceWorker.register(t)), await navigator.serviceWorker.ready, window.addEventListener("beforeunload", () => {
+}
     var n;
     (n = a(this, de)) == null || n.unregister();
   });
   let r = await new Promise((n) => {
+if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("message", function o(i) {
-      i.data.type === "registration-successful" && (navigator.serviceWorker.removeEventListener("message", o), n(i.data.clientId));
+}
+if ("serviceWorker" in navigator) {
+    i.data.type === "registration-successful" && (navigator.serviceWorker.removeEventListener("message", o), n(i.data.clientId));
+}
     }), this.activeRegistration().postMessage({ type: "register-client-main" });
   });
-  return navigator.serviceWorker.addEventListener("message", (n) => {
+if ("serviceWorker" in navigator) {
+    return navigator.serviceWorker.addEventListener("message", (n) => {
+}
     E(this, tr, Js).call(this, n);
   }), r;
 }, tr = /* @__PURE__ */ new WeakSet(), Js = async function(t) {
@@ -35067,11 +35075,15 @@ var import_jsx_runtime7 = __toESM(require_jsx_runtime());
 function setupAppProxyPath(proxy) {
   const appName = `app_${makeRandomKey(20)}`;
   const urlPath = appName + "/";
-  if (!navigator.serviceWorker.controller) {
+if ("serviceWorker" in navigator) {
+    if (!navigator.serviceWorker.controller) {
+}
     throw new Error("ServiceWorker controller was not found!");
   }
   createHttpRequestChannel(proxy, appName, urlPath);
-  navigator.serviceWorker.addEventListener("message", (event) => {
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", (event) => {
+}
     if (event.data.type === "serviceworkerStart") {
       createHttpRequestChannel(proxy, appName, urlPath);
     }
@@ -35079,7 +35091,9 @@ function setupAppProxyPath(proxy) {
   return { appName, urlPath };
 }
 function createHttpRequestChannel(proxy, appName, urlPath) {
-  if (!navigator.serviceWorker.controller) {
+if ("serviceWorker" in navigator) {
+    if (!navigator.serviceWorker.controller) {
+}
     throw new Error("ServiceWorker controller was not found!");
   }
   const httpRequestChannel = new MessageChannel();
@@ -35090,7 +35104,9 @@ function createHttpRequestChannel(proxy, appName, urlPath) {
     }
   });
   httpRequestChannel.port1.start();
-  navigator.serviceWorker.controller.postMessage(
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.controller.postMessage(
+}
     {
       type: "configureProxyPath",
       path: urlPath
