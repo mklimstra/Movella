@@ -14088,6 +14088,7 @@ var require_react_dom_development = __commonJS({
             };
             update.callback = function() {
               {
+                markFailedErrorBoundaryForHotReloading(fiber);
               }
               logCapturedError(fiber, errorInfo);
             };
@@ -14096,9 +14097,11 @@ var require_react_dom_development = __commonJS({
           if (inst !== null && typeof inst.componentDidCatch === "function") {
             update.callback = function callback() {
               {
+                markFailedErrorBoundaryForHotReloading(fiber);
               }
               logCapturedError(fiber, errorInfo);
               if (typeof getDerivedStateFromError !== "function") {
+                markLegacyErrorBoundaryAsFailed(this);
               }
               var error$12 = errorInfo.value;
               var stack = errorInfo.stack;
@@ -14266,6 +14269,7 @@ var require_react_dom_development = __commonJS({
                 var errorInfo = value;
                 var ctor = workInProgress2.type;
                 var instance = workInProgress2.stateNode;
+                if ((workInProgress2.flags & DidCapture) === NoFlags && (typeof ctor.getDerivedStateFromError === "function" || instance !== null && typeof instance.componentDidCatch === "function" && !isAlreadyFailedLegacyErrorBoundary(instance))) {
                   workInProgress2.flags |= ShouldCapture;
                   var _lane = pickArbitraryLane(rootRenderLanes);
                   workInProgress2.lanes = mergeLanes(workInProgress2.lanes, _lane);
@@ -19538,8 +19542,10 @@ var require_react_dom_development = __commonJS({
           }
           return true;
         }
+        function isAlreadyFailedLegacyErrorBoundary(instance) {
           return legacyErrorBoundariesThatAlreadyFailed !== null && legacyErrorBoundariesThatAlreadyFailed.has(instance);
         }
+        function markLegacyErrorBoundaryAsFailed(instance) {
           if (legacyErrorBoundariesThatAlreadyFailed === null) {
             legacyErrorBoundariesThatAlreadyFailed = /* @__PURE__ */ new Set([instance]);
           } else {
@@ -19583,6 +19589,7 @@ var require_react_dom_development = __commonJS({
             } else if (fiber.tag === ClassComponent) {
               var ctor = fiber.type;
               var instance = fiber.stateNode;
+              if (typeof ctor.getDerivedStateFromError === "function" || typeof instance.componentDidCatch === "function" && !isAlreadyFailedLegacyErrorBoundary(instance)) {
                 var errorInfo = createCapturedValueAtFiber(error$1, sourceFiber);
                 var update = createClassErrorUpdate(fiber, errorInfo, SyncLane);
                 var root2 = enqueueUpdate(fiber, update, SyncLane);
@@ -19989,6 +19996,7 @@ var require_react_dom_development = __commonJS({
             return false;
           }
         }
+        function markFailedErrorBoundaryForHotReloading(fiber) {
           {
             if (resolveFamily === null) {
               return;
@@ -31701,16 +31709,24 @@ var Yt = class extends se {
   }
 };
 De = /* @__PURE__ */ new WeakMap(), de = /* @__PURE__ */ new WeakMap(), We = /* @__PURE__ */ new WeakMap(), er = /* @__PURE__ */ new WeakSet(), Vs = async function(t) {
-  d(this, de, await ("serviceWorker" in navigator && navigator.serviceWorker).register(t)), await ("serviceWorker" in navigator && navigator.serviceWorker).ready, window.addEventListener("beforeunload", () => {
+if ("serviceWorker" in navigator) {
+    d(this, de, await navigator.serviceWorker.register(t)), await navigator.serviceWorker.ready, window.addEventListener("beforeunload", () => {
+}
     var n;
     (n = a(this, de)) == null || n.unregister();
   });
   let r = await new Promise((n) => {
-    ("serviceWorker" in navigator && navigator.serviceWorker).addEventListener("message", function o(i) {
-      i.data.type === "registration-successful" && (("serviceWorker" in navigator && navigator.serviceWorker).removeEventListener("message", o), n(i.data.clientId));
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", function o(i) {
+}
+if ("serviceWorker" in navigator) {
+    i.data.type === "registration-successful" && (navigator.serviceWorker.removeEventListener("message", o), n(i.data.clientId));
+}
     }), this.activeRegistration().postMessage({ type: "register-client-main" });
   });
-  return ("serviceWorker" in navigator && navigator.serviceWorker).addEventListener("message", (n) => {
+if ("serviceWorker" in navigator) {
+    return navigator.serviceWorker.addEventListener("message", (n) => {
+}
     E(this, tr, Js).call(this, n);
   }), r;
 }, tr = /* @__PURE__ */ new WeakSet(), Js = async function(t) {
@@ -35059,11 +35075,15 @@ var import_jsx_runtime7 = __toESM(require_jsx_runtime());
 function setupAppProxyPath(proxy) {
   const appName = `app_${makeRandomKey(20)}`;
   const urlPath = appName + "/";
-  if (!("serviceWorker" in navigator && navigator.serviceWorker).controller) {
+if ("serviceWorker" in navigator) {
+    if (!navigator.serviceWorker.controller) {
+}
     throw new Error("ServiceWorker controller was not found!");
   }
   createHttpRequestChannel(proxy, appName, urlPath);
-  ("serviceWorker" in navigator && navigator.serviceWorker).addEventListener("message", (event) => {
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", (event) => {
+}
     if (event.data.type === "serviceworkerStart") {
       createHttpRequestChannel(proxy, appName, urlPath);
     }
@@ -35071,7 +35091,9 @@ function setupAppProxyPath(proxy) {
   return { appName, urlPath };
 }
 function createHttpRequestChannel(proxy, appName, urlPath) {
-  if (!("serviceWorker" in navigator && navigator.serviceWorker).controller) {
+if ("serviceWorker" in navigator) {
+    if (!navigator.serviceWorker.controller) {
+}
     throw new Error("ServiceWorker controller was not found!");
   }
   const httpRequestChannel = new MessageChannel();
@@ -35082,7 +35104,9 @@ function createHttpRequestChannel(proxy, appName, urlPath) {
     }
   });
   httpRequestChannel.port1.start();
-  ("serviceWorker" in navigator && navigator.serviceWorker).controller.postMessage(
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.controller.postMessage(
+}
     {
       type: "configureProxyPath",
       path: urlPath
