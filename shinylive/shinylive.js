@@ -1,6 +1,38 @@
 // Shinylive 0.7.0
 // Copyright 2024 Posit, PBC
 import {
+
+// Error Boundary Component
+import React, { Component } from 'react';
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error) {
+    // Update state so the next render will show the fallback UI.
+    return { hasError: true };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    // You could log the error to an error reporting service here
+    console.error("Caught an error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // You can render any custom fallback UI here
+      return <h1>Something went wrong.</h1>;
+    }
+
+    return this.props.children; 
+  }
+}
+
+export default ErrorBoundary;
+
   FCJSONtoFC,
   FCorFCJSONtoFC,
   Icon,
@@ -31709,16 +31741,16 @@ var Yt = class extends se {
   }
 };
 De = /* @__PURE__ */ new WeakMap(), de = /* @__PURE__ */ new WeakMap(), We = /* @__PURE__ */ new WeakMap(), er = /* @__PURE__ */ new WeakSet(), Vs = async function(t) {
-  d(this, de, await navigator.serviceWorker.register(t)), await navigator.serviceWorker.ready, window.addEventListener("beforeunload", () => {
+  d(this, de, await ("serviceWorker" in navigator && navigator.serviceWorker).register(t)), await ("serviceWorker" in navigator && navigator.serviceWorker).ready, window.addEventListener("beforeunload", () => {
     var n;
     (n = a(this, de)) == null || n.unregister();
   });
   let r = await new Promise((n) => {
-    navigator.serviceWorker.addEventListener("message", function o(i) {
-      i.data.type === "registration-successful" && (navigator.serviceWorker.removeEventListener("message", o), n(i.data.clientId));
+    ("serviceWorker" in navigator && navigator.serviceWorker).addEventListener("message", function o(i) {
+      i.data.type === "registration-successful" && (("serviceWorker" in navigator && navigator.serviceWorker).removeEventListener("message", o), n(i.data.clientId));
     }), this.activeRegistration().postMessage({ type: "register-client-main" });
   });
-  return navigator.serviceWorker.addEventListener("message", (n) => {
+  return ("serviceWorker" in navigator && navigator.serviceWorker).addEventListener("message", (n) => {
     E(this, tr, Js).call(this, n);
   }), r;
 }, tr = /* @__PURE__ */ new WeakSet(), Js = async function(t) {
@@ -35067,11 +35099,11 @@ var import_jsx_runtime7 = __toESM(require_jsx_runtime());
 function setupAppProxyPath(proxy) {
   const appName = `app_${makeRandomKey(20)}`;
   const urlPath = appName + "/";
-  if (!navigator.serviceWorker.controller) {
+  if (!("serviceWorker" in navigator && navigator.serviceWorker).controller) {
     throw new Error("ServiceWorker controller was not found!");
   }
   createHttpRequestChannel(proxy, appName, urlPath);
-  navigator.serviceWorker.addEventListener("message", (event) => {
+  ("serviceWorker" in navigator && navigator.serviceWorker).addEventListener("message", (event) => {
     if (event.data.type === "serviceworkerStart") {
       createHttpRequestChannel(proxy, appName, urlPath);
     }
@@ -35079,7 +35111,7 @@ function setupAppProxyPath(proxy) {
   return { appName, urlPath };
 }
 function createHttpRequestChannel(proxy, appName, urlPath) {
-  if (!navigator.serviceWorker.controller) {
+  if (!("serviceWorker" in navigator && navigator.serviceWorker).controller) {
     throw new Error("ServiceWorker controller was not found!");
   }
   const httpRequestChannel = new MessageChannel();
@@ -35090,7 +35122,7 @@ function createHttpRequestChannel(proxy, appName, urlPath) {
     }
   });
   httpRequestChannel.port1.start();
-  navigator.serviceWorker.controller.postMessage(
+  ("serviceWorker" in navigator && navigator.serviceWorker).controller.postMessage(
     {
       type: "configureProxyPath",
       path: urlPath
