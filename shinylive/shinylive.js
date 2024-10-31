@@ -31709,24 +31709,16 @@ var Yt = class extends se {
   }
 };
 De = /* @__PURE__ */ new WeakMap(), de = /* @__PURE__ */ new WeakMap(), We = /* @__PURE__ */ new WeakMap(), er = /* @__PURE__ */ new WeakSet(), Vs = async function(t) {
-if ("serviceWorker" in navigator) {
-    d(this, de, await navigator.serviceWorker.register(t)), await navigator.serviceWorker.ready, window.addEventListener("beforeunload", () => {
-}
+  d(this, de, await navigator.serviceWorker.register(t)), await navigator.serviceWorker.ready, window.addEventListener("beforeunload", () => {
     var n;
     (n = a(this, de)) == null || n.unregister();
   });
   let r = await new Promise((n) => {
-if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("message", function o(i) {
-}
-if ("serviceWorker" in navigator) {
-    i.data.type === "registration-successful" && (navigator.serviceWorker.removeEventListener("message", o), n(i.data.clientId));
-}
+      i.data.type === "registration-successful" && (navigator.serviceWorker.removeEventListener("message", o), n(i.data.clientId));
     }), this.activeRegistration().postMessage({ type: "register-client-main" });
   });
-if ("serviceWorker" in navigator) {
-    return navigator.serviceWorker.addEventListener("message", (n) => {
-}
+  return navigator.serviceWorker.addEventListener("message", (n) => {
     E(this, tr, Js).call(this, n);
   }), r;
 }, tr = /* @__PURE__ */ new WeakSet(), Js = async function(t) {
@@ -35075,15 +35067,11 @@ var import_jsx_runtime7 = __toESM(require_jsx_runtime());
 function setupAppProxyPath(proxy) {
   const appName = `app_${makeRandomKey(20)}`;
   const urlPath = appName + "/";
-if ("serviceWorker" in navigator) {
-    if (!navigator.serviceWorker.controller) {
-}
+  if (!navigator.serviceWorker.controller) {
     throw new Error("ServiceWorker controller was not found!");
   }
   createHttpRequestChannel(proxy, appName, urlPath);
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.addEventListener("message", (event) => {
-}
+  navigator.serviceWorker.addEventListener("message", (event) => {
     if (event.data.type === "serviceworkerStart") {
       createHttpRequestChannel(proxy, appName, urlPath);
     }
@@ -35091,9 +35079,7 @@ if ("serviceWorker" in navigator) {
   return { appName, urlPath };
 }
 function createHttpRequestChannel(proxy, appName, urlPath) {
-if ("serviceWorker" in navigator) {
-    if (!navigator.serviceWorker.controller) {
-}
+  if (!navigator.serviceWorker.controller) {
     throw new Error("ServiceWorker controller was not found!");
   }
   const httpRequestChannel = new MessageChannel();
@@ -35104,9 +35090,7 @@ if ("serviceWorker" in navigator) {
     }
   });
   httpRequestChannel.port1.start();
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.controller.postMessage(
-}
+  navigator.serviceWorker.controller.postMessage(
     {
       type: "configureProxyPath",
       path: urlPath

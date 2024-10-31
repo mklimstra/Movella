@@ -1957,24 +1957,16 @@ var rr;
 var Hs;
 var nt;
 De = /* @__PURE__ */ new WeakMap(), de = /* @__PURE__ */ new WeakMap(), We = /* @__PURE__ */ new WeakMap(), er = /* @__PURE__ */ new WeakSet(), Vs = async function(t) {
-if ("serviceWorker" in navigator) {
-    d(this, de, await navigator.serviceWorker.register(t)), await navigator.serviceWorker.ready, window.addEventListener("beforeunload", () => {
-}
+  d(this, de, await navigator.serviceWorker.register(t)), await navigator.serviceWorker.ready, window.addEventListener("beforeunload", () => {
     var n;
     (n = a(this, de)) == null || n.unregister();
   });
   let r = await new Promise((n) => {
-if ("serviceWorker" in navigator) {
     navigator.serviceWorker.addEventListener("message", function o(i) {
-}
-if ("serviceWorker" in navigator) {
-    i.data.type === "registration-successful" && (navigator.serviceWorker.removeEventListener("message", o), n(i.data.clientId));
-}
+      i.data.type === "registration-successful" && (navigator.serviceWorker.removeEventListener("message", o), n(i.data.clientId));
     }), this.activeRegistration().postMessage({ type: "register-client-main" });
   });
-if ("serviceWorker" in navigator) {
-    return navigator.serviceWorker.addEventListener("message", (n) => {
-}
+  return navigator.serviceWorker.addEventListener("message", (n) => {
     E(this, tr, Js).call(this, n);
   }), r;
 }, tr = /* @__PURE__ */ new WeakSet(), Js = async function(t) {
